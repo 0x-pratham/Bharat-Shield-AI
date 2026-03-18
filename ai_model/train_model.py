@@ -1,6 +1,7 @@
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 import joblib
+from feature_extractor import extract_features
 
 # Load dataset
 data = pd.read_csv("dataset/malware_dataset.csv")
@@ -14,13 +15,23 @@ model = RandomForestClassifier()
 model.fit(X, y)
 
 # Test prediction
-sample = pd.DataFrame([[12,1,1,2,1,1]], columns=X.columns)
+# Test prediction using dynamic app data
+
+app_data = {
+    "permission_count": 12,
+    "sms_permission": 1,
+    "internet_access": 1,
+    "background_services": 2,
+    "hidden_code": 1,
+    "libraries": 1
+}
+
+features = extract_features(app_data)
+
+sample = pd.DataFrame([features], columns=X.columns)
 
 prediction = model.predict(sample)
 probability = model.predict_proba(sample)
-
-print("Prediction:", prediction)
-print("Malware Probability:", probability[0][1])
 
 # Convert to risk score
 risk_score = int(probability[0][1] * 100)
