@@ -2,7 +2,7 @@ from androguard.core.apk import APK
 
 def analyze_apk(apk_path):
     """
-    Optimized APK analysis (fast + smart)
+    Optimized APK analysis (fast + smart + secure)
     """
 
     a = APK(apk_path)
@@ -10,6 +10,7 @@ def analyze_apk(apk_path):
     permissions = a.get_permissions()
     services = a.get_services()
     activities = a.get_activities()
+    package_name = a.get_package()   # ✅ IMPORTANT (secure identity)
 
     # --- Feature Extraction ---
     permission_count = len(permissions)
@@ -26,7 +27,6 @@ def analyze_apk(apk_path):
     )
 
     # --- Smart Hidden Code Approximation ---
-    # Instead of heavy DEX analysis, we estimate suspicious behavior
     hidden_code = 0
 
     if permission_count > 25 and service_count > 10:
@@ -45,7 +45,8 @@ def analyze_apk(apk_path):
         "internet_access": internet_access,
         "background_services": service_count,
         "hidden_code": hidden_code,
-        "libraries": libraries
+        "libraries": libraries,
+        "package_name": package_name   # ✅ NEW (very important)
     }
 
     return features

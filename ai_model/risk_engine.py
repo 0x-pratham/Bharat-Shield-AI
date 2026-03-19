@@ -1,10 +1,10 @@
-def calculate_risk(probability, app_data, apk_path):
+def calculate_risk(probability, app_data):
     risk_score = int(probability * 100)
     reasons = []
 
-    app_name = apk_path.lower()
+    package_name = app_data.get("package_name", "").lower()
 
-    # --- Base Rules ---
+    # --- BASE RULES ---
     if app_data["permission_count"] > 25:
         risk_score += 5
         reasons.append("Too many permissions")
@@ -24,22 +24,26 @@ def calculate_risk(probability, app_data, apk_path):
         risk_score += 5
         reasons.append("Suspicious hidden behavior")
 
-    # --- CONTEXT AWARE (VERY IMPORTANT) ---
+    # --- TRUST SYSTEM ---
 
-    # Trusted apps (basic logic)
-    if any(x in app_name for x in ["amazon", "flipkart", "google", "youtube"]):
+    # Trusted apps
+    if any(x in package_name for x in ["amazon", "flipkart", "google", "youtube"]):
         risk_score -= 20
-        reasons.append("Trusted app category detected")
+        reasons.append("Trusted package detected")
 
-    # Suspicious mismatch logic
-    if "calculator" in app_name and app_data["internet_access"] == 1:
+    # Semi-trusted apps (third-party stores)
+    elif any(x in package_name for x in ["uptodown", "apkpure", "apkmirror"]):
+        risk_score -= 10
+        reasons.append("Third-party app store (moderate trust)")
+
+    # --- MISMATCH LOGIC ---
+    if "calculator" in package_name and app_data["internet_access"] == 1:
         risk_score += 20
         reasons.append("Calculator app using internet (suspicious)")
 
-    # Clamp
+    # --- FINAL ---
     risk_score = max(0, min(100, risk_score))
 
-    # Status
     if risk_score > 70:
         status = "Dangerous"
     elif risk_score > 40:
