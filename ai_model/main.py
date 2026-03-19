@@ -32,9 +32,11 @@ prediction = model.predict(sample)
 probability = model.predict_proba(sample)
 
 # Step 4: Risk evaluation
-risk_score, status = calculate_risk(probability[0][1])
+risk_score, status, reasons = calculate_risk(probability[0][1], app_data, apk_path)
 
-print("\nPrediction:", prediction[0])
-print("Malware Probability:", probability[0][1])
 print("Risk Score:", risk_score)
 print("Status:", status)
+
+print("\nReasons:")
+for r in reasons:
+    print("-", r)
