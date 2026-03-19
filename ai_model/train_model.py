@@ -1,50 +1,35 @@
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
 import joblib
-from feature_extractor import extract_features
 
 # Load dataset
-data = pd.read_csv("dataset/malware_dataset.csv")
+df = pd.read_csv("dataset/malware_dataset.csv")
 
-# Features and label
-X = data.drop("malware", axis=1)
-y = data["malware"]
+# Split features and target
+X = df.drop("malware", axis=1)
+y = df["malware"]
+
+# Train-test split (IMPORTANT for better learning)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Model (improved)
+model = RandomForestClassifier(
+    n_estimators=200,
+    max_depth=10,
+    random_state=42
+)
 
 # Train model
-model = RandomForestClassifier()
-model.fit(X, y)
+model.fit(X_train, y_train)
 
-# Test prediction
-# Test prediction using dynamic app data
-
-app_data = {
-    "permission_count": 12,
-    "sms_permission": 1,
-    "internet_access": 1,
-    "background_services": 2,
-    "hidden_code": 1,
-    "libraries": 1
-}
-
-features = extract_features(app_data)
-
-sample = pd.DataFrame([features], columns=X.columns)
-
-prediction = model.predict(sample)
-probability = model.predict_proba(sample)
-
-# Convert to risk score
-risk_score = int(probability[0][1] * 100)
-
-if risk_score > 70:
-    status = "Dangerous"
-elif risk_score > 40:
-    status = "Suspicious"
-else:
-    status = "Safe"
-
-print("Risk Score:", risk_score)
-print("Status:", status)
+# Evaluate (optional but good)
+accuracy = model.score(X_test, y_test)
+print(f"✅ Model Accuracy: {accuracy * 100:.2f}%")
 
 # Save model
 joblib.dump(model, "model/bharatshield_model.pkl")
+
+print("✅ Model trained and saved successfully")
