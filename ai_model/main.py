@@ -8,11 +8,10 @@ import pandas as pd
 model = joblib.load("model/bharatshield_model.pkl")
 
 # Give APK path here
-apk_path = "sample.apk"   # put your apk file here
+apk_path = "sample.apk"   # make sure file exists
 
 # Step 1: Analyze APK
 app_data = analyze_apk(apk_path)
-
 print("Extracted App Data:", app_data)
 
 # Step 2: Convert to features
@@ -31,12 +30,28 @@ sample = pd.DataFrame([features], columns=[
 prediction = model.predict(sample)
 probability = model.predict_proba(sample)
 
-# Step 4: Risk evaluation
+# Step 4: Risk evaluation (🔥 IMPORTANT FIX)
 risk_score, status, reasons = calculate_risk(probability[0][1], app_data)
 
+# Step 5: Output (FINAL REPORT)
+print("\n===== BHARAT SHIELD AI REPORT =====")
+
+print("Package:", app_data.get("package_name"))
 print("Risk Score:", risk_score)
 print("Status:", status)
 
+# Optional: confidence
+confidence = probability[0][1] * 100
+print(f"Confidence: {confidence:.2f}%")
+
 print("\nReasons:")
 for r in reasons:
-    print("-", r)
+    print("✔", r)
+
+# Optional: recommendation
+if status.startswith("Dangerous"):
+    print("\n⚠ Recommendation: Do NOT install this app.")
+elif status.startswith("Suspicious"):
+    print("\n⚠ Recommendation: Install with caution.")
+else:
+    print("\n✅ Recommendation: App is safe to use.")
