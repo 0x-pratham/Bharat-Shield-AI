@@ -69,7 +69,13 @@ print("\n===== BHARAT SHIELD AI REPORT =====")
 
 print("Package:", app_data.get("package_name", "Unknown"))
 print("Risk Score:", risk_score)
-print("Status:", status)
+    # 🔥 COLOR SYSTEM
+if status == "Safe":
+    print("Status: 🟢 Safe")
+elif status == "Suspicious":
+    print("Status: 🟡 Suspicious")
+else:
+    print("Status: 🔴 Dangerous")
 
 # Confidence
 confidence = prob_score * 100
@@ -99,3 +105,12 @@ elif status.startswith("Suspicious"):
     print("\n⚠ Recommendation: Install with caution.")
 else:
     print("\n✅ Recommendation: App is safe to use.")
+
+print("\n===== FINAL SUMMARY =====")
+
+if status == "Safe":
+    print("✅ This app appears safe based on current analysis.")
+elif status == "Suspicious":
+    print("⚠ This app shows some suspicious behavior. Review carefully.")
+else:
+    print("🚨 This app is highly risky and may harm your device or data.")
