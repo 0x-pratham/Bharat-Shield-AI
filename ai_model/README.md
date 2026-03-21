@@ -14,3 +14,6 @@ Helper scripts (later)
 
     Installation 
     python -m pip install pandas numpy scikit-learn joblib
+
+    installation of androguard 
+    python -m pip install androguard

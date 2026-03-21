@@ -6,11 +6,15 @@ import joblib
 import pandas as pd
 import os
 
-# Load trained model
-model = joblib.load("model/bharatshield_model.pkl")
+# --- LOAD MODEL ---
+try:
+    model = joblib.load("model/bharatshield_model.pkl")
+except Exception as e:
+    print("❌ Failed to load model:", e)
+    exit()
 
-# --- FILE PICKER (NEW 🔥) ---
-Tk().withdraw()  # hide tkinter window
+# --- FILE PICKER ---
+Tk().withdraw()
 
 apk_path = filedialog.askopenfilename(
     title="Select APK file",
@@ -21,16 +25,23 @@ if not apk_path:
     print("❌ No file selected")
     exit()
 
-print("Selected APK:", apk_path)
+print("\nSelected APK:", apk_path)
 print("File Name:", os.path.basename(apk_path))
 
+# --- STEP 1: Analyze APK ---
+try:
+    app_data = analyze_apk(apk_path)
+    print("\nExtracted App Data:", app_data)
+except Exception as e:
+    print("❌ APK analysis failed:", e)
+    exit()
 
-# Step 1: Analyze APK
-app_data = analyze_apk(apk_path)
-print("Extracted App Data:", app_data)
-
-# Step 2: Convert to features
-features = extract_features(app_data)
+# --- STEP 2: Feature Extraction ---
+try:
+    features = extract_features(app_data)
+except Exception as e:
+    print("❌ Feature extraction failed:", e)
+    exit()
 
 sample = pd.DataFrame([features], columns=[
     "permission_count",
@@ -41,14 +52,26 @@ sample = pd.DataFrame([features], columns=[
     "libraries"
 ])
 
-# Step 3: Predict
-prediction = model.predict(sample)
-probability = model.predict_proba(sample)
+# --- STEP 3: AI Prediction ---
+try:
+    prediction = model.predict(sample)
+    probability = model.predict_proba(sample)
+except Exception as e:
+    print("❌ Model prediction failed:", e)
+    exit()
 
-# Step 4: Risk evaluation
-risk_score, status, reasons = calculate_risk(probability[0][1], app_data)
+# --- STEP 4: Risk Engine ---
+result = calculate_risk(probability[0][1], app_data)
 
-# Step 5: Output (FINAL REPORT)
+# Handle flexible return
+if len(result) == 3:
+    risk_score, status, reasons = result
+    behaviors = []
+    explanations = []
+else:
+    risk_score, status, reasons, behaviors, explanations = result
+
+# --- STEP 5: OUTPUT ---
 print("\n===== BHARAT SHIELD AI REPORT =====")
 
 print("Package:", app_data.get("package_name"))
@@ -59,9 +82,22 @@ print("Status:", status)
 confidence = probability[0][1] * 100
 print(f"Confidence: {confidence:.2f}%")
 
+# Reasons
 print("\nReasons:")
 for r in reasons:
     print("✔", r)
+
+# Behavior (future)
+if behaviors:
+    print("\nPredicted Behavior:")
+    for b in behaviors:
+        print("⚠", b)
+
+# Explanation (future)
+if explanations:
+    print("\nPermission Explanation:")
+    for e in explanations:
+        print("ℹ", e)
 
 # Recommendation
 if status.startswith("Dangerous"):
