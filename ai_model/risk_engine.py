@@ -24,15 +24,24 @@ def calculate_risk(probability, app_data):
         risk_score += 5
         reasons.append("Suspicious hidden behavior")
 
-    # --- TRUST SYSTEM ---
+    # --- NORMAL APP RELAXATION (NEW 🔥) ---
+    if app_data["sms_permission"] == 0 and app_data["hidden_code"] == 0:
+        risk_score -= 10
+        reasons.append("No critical malicious indicators")
 
-    # Trusted apps
-    if any(x in package_name for x in ["amazon", "flipkart", "google", "youtube"]):
-        risk_score -= 20
-        reasons.append("Trusted package detected")
+    # --- TRUST SYSTEM (IMPROVED 🔥) ---
 
-    # Semi-trusted apps (third-party stores)
-    elif any(x in package_name for x in ["uptodown", "apkpure", "apkmirror"]):
+    # Strong trusted apps
+    if any(x in package_name for x in [
+        "amazon", "flipkart", "google", "youtube", "whatsapp"
+    ]):
+        risk_score -= 30
+        reasons.append("Trusted application (verified source)")
+
+    # Semi-trusted apps
+    elif any(x in package_name for x in [
+        "uptodown", "apkpure", "apkmirror"
+    ]):
         risk_score -= 10
         reasons.append("Third-party app store (moderate trust)")
 
