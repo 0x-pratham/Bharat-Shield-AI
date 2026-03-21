@@ -3,12 +3,15 @@ def calculate_risk(probability, app_data):
     risk_score = int(probability * 70)
     reasons = []
 
+    package_name = app_data.get("package_name", "").lower()
+
     # --- BASE RULES ---
     if app_data["permission_count"] > 25:
         risk_score += 5
         reasons.append("Too many permissions")
 
     if app_data["background_services"] > 10:
+        reasons.append("ℹ App runs in background which may consume battery or track activity")
         risk_score += 5
         reasons.append("High background activity")
 
@@ -17,7 +20,11 @@ def calculate_risk(probability, app_data):
         reasons.append("SMS access detected (high risk)")
 
     if app_data["internet_access"] == 1:
-        reasons.append("Uses internet connection")
+        reasons.append("Internet access detected")
+
+# 🔥 ADD THIS BELOW
+    if app_data["internet_access"] == 1:
+     reasons.append("ℹ Internet is used for loading content or communication (normal)")
 
     # --- IMPROVED HIDDEN CODE LOGIC ---
     if app_data["hidden_code"] == 1 and app_data["sms_permission"] == 1:
@@ -27,7 +34,7 @@ def calculate_risk(probability, app_data):
         risk_score += 2
         reasons.append("Complex internal behavior detected")
 
-    # --- PERMISSION INTELLIGENCE (VERY IMPORTANT 🔥) ---
+    # --- PERMISSION INTELLIGENCE ---
     if app_data["internet_access"] == 1 and app_data["sms_permission"] == 0:
         risk_score -= 10
         reasons.append("Internet usage is normal for most apps")
@@ -37,10 +44,9 @@ def calculate_risk(probability, app_data):
         risk_score -= 10
         reasons.append("No critical malicious indicators")
 
-    # --- TRUST SCORE SYSTEM (CORE INTELLIGENCE 🔥) ---
+    # --- TRUST SCORE SYSTEM ---
     trust_score = 0
 
-    # Good indicators
     if app_data["sms_permission"] == 0:
         trust_score += 2
 
@@ -50,19 +56,23 @@ def calculate_risk(probability, app_data):
     if app_data["background_services"] < 10:
         trust_score += 1
 
-    # Bad indicators
     if app_data["sms_permission"] == 1:
+        reasons.append("⚠ Can read SMS messages (may access OTP)")
         trust_score -= 3
 
     if app_data["hidden_code"] == 1 and app_data["background_services"] > 10:
         trust_score -= 2
 
-    # Apply trust effect
     risk_score -= trust_score * 4
     reasons.append(f"Trust score adjustment: {trust_score}")
 
+    # --- MODDED / UNOFFICIAL APP DETECTION 🔥 ---
+    if any(keyword in package_name for keyword in ["mod", "pro", "hack", "plus", "clone"]):
+        risk_score += 20
+        reasons.append("Possible unofficial or modified app detected")
+
     # --- MISMATCH LOGIC ---
-    if "calculator" in app_data.get("package_name", "").lower() and app_data["internet_access"] == 1:
+    if "calculator" in package_name and app_data["internet_access"] == 1:
         risk_score += 20
         reasons.append("Calculator app using internet (suspicious)")
 
