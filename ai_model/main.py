@@ -56,30 +56,23 @@ sample = pd.DataFrame([features], columns=[
 try:
     prediction = model.predict(sample)
     probability = model.predict_proba(sample)
+    prob_score = float(probability[0][1])
 except Exception as e:
     print("❌ Model prediction failed:", e)
     exit()
 
 # --- STEP 4: Risk Engine ---
-result = calculate_risk(probability[0][1], app_data)
-
-# Handle flexible return
-if len(result) == 3:
-    risk_score, status, reasons = result
-    behaviors = []
-    explanations = []
-else:
-    risk_score, status, reasons, behaviors, explanations = result
+risk_score, status, reasons, behaviors, explanations = calculate_risk(prob_score, app_data)
 
 # --- STEP 5: OUTPUT ---
 print("\n===== BHARAT SHIELD AI REPORT =====")
 
-print("Package:", app_data.get("package_name"))
+print("Package:", app_data.get("package_name", "Unknown"))
 print("Risk Score:", risk_score)
 print("Status:", status)
 
 # Confidence
-confidence = probability[0][1] * 100
+confidence = prob_score * 100
 print(f"Confidence: {confidence:.2f}%")
 
 # Reasons
@@ -87,13 +80,13 @@ print("\nReasons:")
 for r in reasons:
     print("✔", r)
 
-# Behavior (future)
+# Behavior
 if behaviors:
     print("\nPredicted Behavior:")
     for b in behaviors:
         print("⚠", b)
 
-# Explanation (future)
+# Explanation
 if explanations:
     print("\nPermission Explanation:")
     for e in explanations:
