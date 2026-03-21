@@ -66,36 +66,23 @@ Final Report
 📊 Output Includes
 Risk Score
 
-Status (Safe / Suspicious / Dangerous)
-
-Confidence %
-
-Reasons
-
-Predicted Behavior
-
-Permission Explanation
-
-Recommendation
+- Status (Safe / Suspicious / Dangerous)
+- Confidence %
+- Reasons
+- Predicted Behavior
+- Permission Explanation
+- Recommendation
 
 🔥 Technologies Used
-Python 3.10
-
-Scikit-learn (Random Forest)
-
-Androguard
-
-Pandas
-
-NumPy
+- Python 3.10
+- Scikit-learn (Random Forest)
+- Androguard
+- Pandas
+- NumPy
 
 ⚠️ Future Improvements
-Larger dataset (Drebin dataset)
-
-Improved accuracy with advanced features
-
-Real-time app monitoring
-
-Cloud threat intelligence integration
-
-Mobile app integration
+- Larger dataset (Drebin dataset)
+- Improved accuracy with advanced features
+- Real-time app monitoring
+- Cloud threat intelligence integration
+- Mobile app integration
