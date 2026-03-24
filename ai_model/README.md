@@ -86,4 +86,3 @@ Risk Score
 - Real-time app monitoring
 - Cloud threat intelligence integration
 - Mobile app integration
--Security Features

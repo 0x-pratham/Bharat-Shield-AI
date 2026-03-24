@@ -1,6 +1,7 @@
 from tkinter import Tk, filedialog
 from apk_analyzer import analyze_apk
 from feature_extractor import extract_features
+from drebin_feature_extractor import extract_drebin_features
 from risk_engine import calculate_risk
 import joblib
 import pandas as pd
@@ -42,6 +43,12 @@ try:
 except Exception as e:
     print("❌ Feature extraction failed:", e)
     exit()
+    # --- NEW: DREBIN FEATURE EXTRACTION (TEST ONLY 🔥) ---
+try:
+    drebin_features = extract_drebin_features(app_data)
+    print("\n🔬 Drebin Features:", drebin_features)
+except Exception as e:
+    print("❌ Drebin feature extraction failed:", e)
 
 sample = pd.DataFrame([features], columns=[
     "permission_count",
