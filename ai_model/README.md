@@ -1,173 +1,172 @@
-🛡️ Bharat Shield AI
-An AI-powered Android malware detection system that analyzes APK files and predicts security risks using machine learning + behavioral analysis + explainable AI.
+# 🛡️ Bharat Shield AI
 
-🚀 Features
-🔍 APK Static Analysis (using Androguard)
-🤖 AI-based Malware Detection (Random Forest)
-🧠 Hybrid Risk Scoring Engine (AI + Rules)
-🔐 Modded App Detection (Unofficial / Tampered Apps)
+AI-powered Android malware detection system that analyzes APK files and predicts security risks using Machine Learning, Behavioral Analysis, and Explainable AI.
 
-⚠ Behavior Prediction (What app might do)
-📊 Confidence Score
-🧾 Explainable AI Output (User-friendly explanations)
-🧪 Drebin-inspired Feature System (Advanced pipeline)
+---
 
-🧠 System Architecture
+## 🚀 Features
 
-APK File
-   ↓
-APK Analyzer (Androguard)
-   ↓
-Feature Extraction (Basic + Drebin-style)
-   ↓
-AI Model Prediction
-   ↓
-Risk Engine (Context-aware logic)
-   ↓
-Final Report (Explainable Output)
+- APK Static Analysis (Androguard)
+- AI-based Malware Detection (Random Forest)
+- Hybrid Risk Scoring Engine (AI + Rules)
+- Modded App Detection
+- Behavior Prediction
+- Confidence Score
+- Explainable Output
+- Drebin-inspired Feature System (Advanced)
 
-📂 Project Structure
+---
+
+## 🧠 System Workflow
+
+APK File  
+↓  
+APK Analyzer  
+↓  
+Feature Extraction (Basic + Drebin)  
+↓  
+AI Model  
+↓  
+Risk Engine  
+↓  
+Final Report  
+
+---
+
+## 📂 Project Structure
 
 BHARAT-SHIELDAI/
-│
-├── ai_model/
-│   ├── apk_analyzer.py              # Extract APK data
-│   ├── feature_extractor.py         # Basic ML features (6 features)
-│   ├── drebin_feature_extractor.py  # Advanced Drebin-style features 🔥
-│   ├── risk_engine.py               # Risk scoring + logic engine
-│   ├── build_drebin_dataset.py      # Dataset builder (GUI file picker)
-│   ├── train_model.py               # Basic model training
-│   ├── train_drebin_model.py        # Drebin model training 🔥
-│   ├── main.py                      # Main execution file
-│
-├── dataset/
-│   ├── malware_dataset.csv          # Basic dataset (old system)
-│   ├── drebin_dataset.csv           # Advanced dataset (new system) 🔥
-│
-├── model/
-│   ├── bharatshield_model.pkl       # Basic trained model
-│   ├── drebin_model.pkl             # Advanced Drebin model 🔥
-│
-├── notebooks/
-│   └── train_model.ipynb            # Experimentation
-│
-└── README.md
 
-⚙️ Installation
-python -m pip install pandas numpy scikit-learn joblib androguard
+ai_model/  
+ apk_analyzer.py  
+ feature_extractor.py  
+ drebin_feature_extractor.py  
+ risk_engine.py  
+ build_drebin_dataset.py  
+ train_model.py  
+ train_drebin_model.py  
+ main.py  
 
-▶️ How to Run
-cd ai_model
-python main.py
+dataset/  
+ malware_dataset.csv  
+ drebin_dataset.csv  
 
-🧪 Build Drebin Dataset (New 🔥)
-python build_drebin_dataset.py
+model/  
+ bharatshield_model.pkl  
+ drebin_model.pkl  
 
-Select APK via file picker
+notebooks/  
+ train_model.ipynb  
 
-Choose label:
+README.md  
 
-0 = Safe
-1 = Suspicious (Mod APK)
-2 = Malware
-👉 Automatically saves features to drebin_dataset.csv
+---
 
-🤖 Train Models
-🔹 Basic Model
-python train_model.py
+## ⚙️ Installation
 
-🔥 Drebin Model (Advanced)
-python train_drebin_model.py
+pip install pandas numpy scikit-learn joblib androguard
 
-📊 Output Includes
-Risk Score (0–100)
+---
 
-Status:
+## ▶️ Run Project
 
-🟢 Safe
+cd ai_model  
+python main.py  
 
-🟡 Suspicious
+Select APK file → Get analysis report  
 
-🔴 Dangerous
+---
 
-Confidence %
-Reasons (Why flagged)
-Predicted Behavior
-Permission Explanation
-Final Recommendation
+## 🧪 Build Drebin Dataset
 
-🧠 AI Models
-🔹 Basic Model
-Uses 6 core features:
+python build_drebin_dataset.py  
 
-Permissions
-SMS access
-Internet usage
-Background services
-Hidden code
-Libraries
+Labels:  
+0 = Safe  
+1 = Suspicious (Mod APK)  
+2 = Malware  
 
-🔥 Drebin-Inspired Model (Advanced)
-Uses extended behavioral features:
+---
 
-Permission patterns
-App category detection
-Background behavior
-Hidden logic detection
-Complexity indicators
+## 🤖 Train Models
 
-⚠️ Note:
-This is a Drebin-inspired implementation, not full 123k feature Drebin dataset.
-Full Drebin integration is planned as a future upgrade.
+Basic Model:  
+python train_model.py  
 
-🧠 Multi-Class Classification (NEW 🔥)
-Model supports:
+Drebin Model:  
+python train_drebin_model.py  
 
-0 → Safe
-1 → Suspicious (Mod / Unofficial)
-2 → Malware
+---
 
-👉 This improves real-world detection accuracy.
+## 🧠 AI Models
 
-🔥 Technologies Used
-Python 3.10
+Basic Model:
+- 6 core features
+- Lightweight
 
-Scikit-learn (Random Forest)
-Androguard
-Pandas
-NumPy
-Tkinter (File Picker UI)
+Drebin Model:
+- Behavioral features
+- Permission patterns
+- App classification
+- Complexity detection
 
-⚠️ Limitations
-Limited dataset (currently small-scale training)
-Drebin features are simplified (not full dataset)
-No real-time monitoring yet
-Static analysis only (no dynamic runtime analysis)
+Note:
+This is a Drebin-inspired system (not full dataset yet)
 
-🚀 Future Improvements
-Full Drebin dataset integration (5560 apps, 123k features)
+---
 
-Signature verification system (detect fake apps)
-Real-time app monitoring (Android integration)
-Backend API + cloud intelligence
-Mobile app (React Native)
-Dynamic malware analysis (sandboxing)
-Threat intelligence database
+## 🧠 Multi-Class Classification
 
-🏆 Project Vision
-To build a real-time AI-powered mobile security system that can:
+0 = Safe  
+1 = Suspicious  
+2 = Malware  
 
-Detect malware before installation
-Identify fake/modded apps
-Provide simple explanations for non-technical users
-Work efficiently even on low-end devices
+---
 
-💀 FINAL NOTE
-This project combines:
-✔ Machine Learning
-✔ Cybersecurity Concepts
-✔ Explainable AI
-✔ Real-world Risk Analysis
+## 📊 Output Includes
 
-👨‍💻 Author
+- Risk Score (0–100)
+- Status (Safe / Suspicious / Dangerous)
+- Confidence %
+- Reasons
+- Predicted Behavior
+- Explanation
+- Recommendation
+
+---
+
+## ⚠️ Limitations
+
+- Small dataset
+- Simplified Drebin features
+- Static analysis only
+- No real-time monitoring
+
+---
+
+## 🚀 Future Improvements
+
+- Full Drebin dataset integration
+- Signature verification
+- Real-time monitoring
+- Cloud threat intelligence
+- Mobile app integration
+- Dynamic analysis
+
+---
+
+## 👨‍💻 Author
+
 Akash Lad
+
+---
+
+## ⭐ Note
+
+This project combines:
+- Machine Learning
+- Cybersecurity
+- Explainable AI
+- Risk Analysis
+
+Making it a strong hackathon-level and industry-ready foundation.
