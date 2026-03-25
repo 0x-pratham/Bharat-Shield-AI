@@ -1,22 +1,28 @@
 from androguard.core.apk import APK
 
+
 def analyze_apk(apk_path):
     """
-    Optimized APK analysis (fast + smart + secure)
+    Analyze APK and extract basic security features
     """
 
-    a = APK(apk_path)
+    try:
+        a = APK(apk_path)
+    except Exception as e:
+        print(f"❌ Error loading APK: {e}")
+        return None
 
+    # --- Extract Data ---
     permissions = a.get_permissions()
     services = a.get_services()
     activities = a.get_activities()
-    package_name = a.get_package()   # ✅ IMPORTANT (secure identity)
 
-    # --- Feature Extraction ---
+    # --- Basic Counts ---
     permission_count = len(permissions)
     service_count = len(services)
     activity_count = len(activities)
 
+    # --- Key Permissions ---
     sms_permission = int(
         "android.permission.READ_SMS" in permissions or
         "android.permission.SEND_SMS" in permissions
@@ -26,27 +32,29 @@ def analyze_apk(apk_path):
         "android.permission.INTERNET" in permissions
     )
 
-    # --- Smart Hidden Code Approximation ---
+    # --- Hidden Code Heuristic ---
     hidden_code = 0
 
     if permission_count > 25 and service_count > 10:
-        hidden_code = 1  # suspicious pattern
+        hidden_code = 1
 
     if activity_count > 20:
         hidden_code = 1
 
     # --- Libraries ---
-    libraries = len(a.get_libraries())
+    try:
+        libraries = len(a.get_libraries())
+    except:
+        libraries = 0
 
-    # --- Final Feature Dictionary ---
+    # --- Final Features (ONLY NUMERIC ⚠️) ---
     features = {
         "permission_count": permission_count,
         "sms_permission": sms_permission,
         "internet_access": internet_access,
         "background_services": service_count,
         "hidden_code": hidden_code,
-        "libraries": libraries,
-        "package_name": package_name   # ✅ NEW (very important)
+        "libraries": libraries
     }
 
     return features

@@ -1,16 +1,25 @@
-def extract_features(app_data):
+import pandas as pd
+
+def extract_features(app_data, model):
     """
-    Simulated feature extractor (for now)
-    Later this will come from real APK
+    Convert app_data into full feature vector matching trained model
     """
 
-    features = [
-        app_data.get("permission_count", 0),
-        app_data.get("sms_permission", 0),
-        app_data.get("internet_access", 0),
-        app_data.get("background_services", 0),
-        app_data.get("hidden_code", 0),
-        app_data.get("libraries", 0)
-    ]
+    # 🔥 Get model feature names (215 features)
+    feature_names = model.feature_names_in_
 
-    return features
+    # 🔥 Start with all zeros
+    features = {col: 0 for col in feature_names}
+
+    # 🔥 Map your existing features (basic mapping)
+    features["SEND_SMS"] = app_data.get("sms_permission", 0)
+    features["INTERNET"] = app_data.get("internet_access", 0)
+    features["RECEIVE_SMS"] = app_data.get("sms_permission", 0)
+    features["READ_SMS"] = app_data.get("sms_permission", 0)
+
+    # You can expand mapping later 🔥
+
+    # 🔥 Convert to DataFrame
+    df = pd.DataFrame([features])
+
+    return df
